@@ -22,7 +22,7 @@ OGLWidget::OGLWidget(QWidget *parent): QOpenGLWidget(parent){
     //set up timer to deal with periodic updates
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerSlot()));
-    timer->start(100);//time interval 1000=1s
+    timer->start(30);//time interval 1000=1s
 }
 
 OGLWidget::~OGLWidget()
@@ -60,6 +60,10 @@ void OGLWidget::setRotZ(int newrz){
 void OGLWidget::timerSlot(){
     //dt is constant due to the timer value set
     ball->recalculatePosition(0.1, gravity);
+    if(ball->position.y()<-36){
+        ball->radius=0;
+        ball = new Ball (QVector3D(0.0,-05,1), QVector3D(1,0,0), 1 ,1, QVector3D(-7,13,0));
+    }
     detectCollision();
     update();
 }
@@ -93,7 +97,6 @@ void OGLWidget::initializeGL(){
 void OGLWidget::drawArena(){
     float length = 50;
     float width = 30;
-    float height = 3;
     float centerPosX = 0;
     float centerPosY = 0;
     float centerPosZ = 0;
@@ -103,8 +106,8 @@ void OGLWidget::drawArena(){
     //surface
     glColor3f(1,1,0);//yellow
     glNormal3f(0, 1, 0); //Up
-    glVertex3f(centerPosX-width/2, centerPosY-length/2, centerPosZ);
-    glVertex3f(centerPosX+width/2, centerPosY-length/2, centerPosZ);
+    glVertex3f(centerPosX-width/2, centerPosY-length/2-10, centerPosZ);
+    glVertex3f(centerPosX+width/2, centerPosY-length/2-10, centerPosZ);
     glVertex3f(centerPosX+width/2, centerPosY+length/2, centerPosZ);
     glVertex3f(centerPosX-width/2, centerPosY+length/2, centerPosZ);
     glNormal3f( 0, 0, 1); //Towards
@@ -134,6 +137,19 @@ void OGLWidget::createGameObjects(){
     topS.push_back(QVector2D(-15,28));
     GameObject *topSide = new GameObject(topS, QVector3D(1,0,0), 5);
 
+    vector<QVector2D> botLeftTri;
+    botLeftTri.push_back(QVector2D(-15, -20));
+    botLeftTri.push_back(QVector2D(-10,-25));
+    botLeftTri.push_back(QVector2D(-15,-25));
+    GameObject *botLeftTriangle = new GameObject(botLeftTri, QVector3D(1,0,0), 5);
+
+    vector<QVector2D> botRightTri;
+    botRightTri.push_back(QVector2D(15, -20));
+    botRightTri.push_back(QVector2D(10,-25));
+    botRightTri.push_back(QVector2D(15,-25));
+    GameObject *botRightTriangle = new GameObject(botRightTri, QVector3D(1,0,0), 5);
+
+
     vector<QVector2D> quad;
     quad.push_back(QVector2D(1,1));
     quad.push_back(QVector2D(1,3));
@@ -145,6 +161,9 @@ void OGLWidget::createGameObjects(){
     gameObjects.push_back(*leftSide);
     gameObjects.push_back(*rightSide);
     gameObjects.push_back(*topSide);
+    gameObjects.push_back(*botLeftTriangle);
+    gameObjects.push_back(*botRightTriangle);
+
     //game objects
     gameObjects.push_back(*quadObj);
 
