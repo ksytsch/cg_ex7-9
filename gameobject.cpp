@@ -8,11 +8,7 @@
 #include <QVector>
 
 using namespace std;
-
-GameObject::GameObject()
-{
-
-}
+GameObject::GameObject(){}
 
 GameObject::GameObject(std::vector <QVector2D> p, QVector3D c, float h){
 

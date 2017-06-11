@@ -14,13 +14,12 @@ public:
     QVector3D colour;
     float height;
 
-    boolean activated;
-    std::vector<QVector2D> minAcceleration;
     std::vector<QVector2D> maxAcceleration;
 
 
-
     Flipper();
+    Flipper(std::vector <QVector2D> p,  QVector3D c, float h);
+    void drawPseudo3d();
 };
 
 #endif // FLIPPER_H

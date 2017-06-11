@@ -61,8 +61,7 @@ void OGLWidget::timerSlot(){
     //dt is constant due to the timer value set
     ball->recalculatePosition(0.1, gravity);
     if(ball->position.y()<-36){
-        ball->radius=0;
-        ball = new Ball (QVector3D(0.0,-05,1), QVector3D(1,0,0), 1 ,1, QVector3D(-7,13,0));
+        ball = new Ball (QVector3D(0.0,-15,1), QVector3D(1,0,0), 1 ,1, QVector3D(-7,13,0));
     }
     detectCollision();
     update();
@@ -139,15 +138,32 @@ void OGLWidget::createGameObjects(){
 
     vector<QVector2D> botLeftTri;
     botLeftTri.push_back(QVector2D(-15, -20));
+    botLeftTri.push_back(QVector2D(-10,-22));
     botLeftTri.push_back(QVector2D(-10,-25));
     botLeftTri.push_back(QVector2D(-15,-25));
     GameObject *botLeftTriangle = new GameObject(botLeftTri, QVector3D(1,0,0), 5);
 
     vector<QVector2D> botRightTri;
     botRightTri.push_back(QVector2D(15, -20));
+    botRightTri.push_back(QVector2D(10,-22));
     botRightTri.push_back(QVector2D(10,-25));
     botRightTri.push_back(QVector2D(15,-25));
     GameObject *botRightTriangle = new GameObject(botRightTri, QVector3D(1,0,0), 5);
+
+    vector<QVector2D> leftFlip;
+    leftFlip.push_back(QVector2D(-10,-22));
+    leftFlip.push_back(QVector2D(-10,-25));
+    leftFlip.push_back(QVector2D(-3,-25));
+    leftFlip.push_back(QVector2D(-2.5,-24));
+    GameObject *lFlipper = new GameObject(leftFlip, QVector3D(0,0,1), 2);
+
+    vector<QVector2D> rightFlip;
+    rightFlip.push_back(QVector2D(10,-22));
+    rightFlip.push_back(QVector2D(10,-25));
+    rightFlip.push_back(QVector2D(3, -25));
+    rightFlip.push_back(QVector2D(2.5,-24));
+    GameObject *rFlipper = new GameObject(rightFlip, QVector3D(0,0,1), 2);
+
 
 
     vector<QVector2D> quad;
@@ -157,12 +173,16 @@ void OGLWidget::createGameObjects(){
     quad.push_back(QVector2D(3,1));
     GameObject *quadObj = new GameObject(quad, QVector3D(0,1,0), 3);
 
-    //sides
+    //sides + flippers
     gameObjects.push_back(*leftSide);
     gameObjects.push_back(*rightSide);
     gameObjects.push_back(*topSide);
     gameObjects.push_back(*botLeftTriangle);
     gameObjects.push_back(*botRightTriangle);
+    gameObjects.push_back(*lFlipper);
+    gameObjects.push_back(*rFlipper);
+
+
 
     //game objects
     gameObjects.push_back(*quadObj);
@@ -190,7 +210,7 @@ void OGLWidget::paintGL(){
     glRotatef(rotz, 0.0f, 0.0f, 1.0f); // Rotate around z axis
 
     // Apply scaling
-    float scale = zoom/100.0;
+    float scale = zoom/350.0;
     glScalef( scale, scale, scale ); // Scale along all axis
     // Change light position
     float light_pos[] = { 10.f * cosf(light*M_PI/180.f),
@@ -228,7 +248,6 @@ void OGLWidget::detectCollision(){
         QVector3D vb = 2*(-va * QVector3D(1,-1,0))*QVector3D(1,-1,0)+va;
         ball->speed =vb;
     }
-
 }
 
 void OGLWidget::resizeGL(int w, int h)
