@@ -6,6 +6,8 @@
 #include <cmath>
 #include <vector>
 #include <QVector>
+#include <iostream>
+
 
 using namespace std;
 Flipper::Flipper(){}
@@ -17,6 +19,7 @@ Flipper::Flipper(std::vector <QVector2D> p, QVector3D c, float h){
 }
 
 void Flipper::drawPseudo3d(){
+
     //paint figure at the given height
     glBegin(GL_POLYGON);
     glColor3f(colour.x(),colour.y(),colour.z());
@@ -44,4 +47,32 @@ void Flipper::drawPseudo3d(){
     glVertex3f(points.at(0).x(), points.at(0).y(), 0);
     glVertex3f(points.at(points.size()-1).x(), points.at(points.size()-1).y(), 0);
     glEnd();
+}
+
+
+//void Flipper::activateFlipper(){
+//    //timer->move 10 deg -> calculate distance -> if collision ->stop and push
+//    QVector2D colPoint = checkCollisionArea();
+//    if(colPoint != NULL){
+//        calculateCollisionAngle();//param - colPoint. Also rotPoint needed
+//        rotate();
+//    }
+//}
+
+//QVector2D Flipper::checkCollisionArea(){}
+
+//float Flipper::calculateCollisionAngle(){}
+
+void Flipper::rotate(float angle){
+    //rotPoint = points[0];
+
+
+
+
+}
+
+void Flipper::activateFlipper(){
+    enabled = true;
+    cout << "f" << endl;
+
 }
